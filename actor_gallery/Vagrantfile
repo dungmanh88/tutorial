@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "centos/7"
-  config.vm.network :forwarded_port, guest: 8080, host: 8080
+  config.vm.network :forwarded_port, guest: 8000, host: 8081
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -77,33 +77,34 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    yum -y install gcc gcc-c++ make automake
-    yum install https://centos7.iuscommunity.org/ius-release.rpm
-    yum install python36u python36u-devel
-    wget -O /tmp/get-pip.py https://pip.pypa.io/en/stable/installing/
-    python3.6 /tmp/get-pip.py
-    pip install --upgrade pip
-    pip install scrapy
-    cat <<EOT > /etc/yum.repos.d/mongodb.repo
-[mongodb-org-3.6]
-name=MongoDB Repository
-baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.6/x86_64/
-gpgcheck=1
-enabled=1
-gpgkey=https://www.mongodb.org/static/pgp/server-3.6.asc
-EOT
-    yum install -y mongodb-org
+    yum -y install gcc gcc-c++ make automake wget
     wget -O /tmp/mysql.repo https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
     rpm -ivh /tmp/mysql.repo
+    wget -O /tmp/remi.repo https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+    rpm -ivh /tmp/remi.repo
+    yum -y install epel-release
+
     yum -y install yum-utils
+
+    yum-config-manager --enable remi-php56
+    yum --enablerepo=remi-php56 -y install php
+
     yum-config-manager --disable mysql57-community
     yum-config-manager --enable mysql56-community
     yum -y install mysql-community-server mysql-community-devel
+    yum -y install --enablerepo=remi-php56 php-mbstring php-mysqlnd php-fpm php-devel php-pear php-opcache php-pecl-redis php-gd php-fpm nginx
     systemctl enable mysqld
-    systemctl enable mongod
     systemctl start mysqld
-    systemctl start mongod
+    systemctl enable php-fpm
+    systemctl start php-fpm
     yum -y install git
-    pip install configparser mysqlclient nltk sqlalchemy base
+    if [ ! -f /usr/bin/composer ]; then
+      php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+      php composer-setup.php
+      php -r "unlink('composer-setup.php');"
+      mv composer.phar /usr/bin/composer
+      composer global require "laravel/installer"
+    fi
   SHELL
 end

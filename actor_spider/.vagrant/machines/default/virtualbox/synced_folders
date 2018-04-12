@@ -1,1 +1,1 @@
-{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/Users/manhdung/tutorial/actor_spider","disabled":false,"rsync__exclude":[".git/",".idea/"],"__vagrantfile":true,"exclude":[".git/",".idea/"],"owner":"vagrant","group":"vagrant"}}}
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/Users/manhdung/tutorial/actor_spider","disabled":false,"rsync__exclude":[".git/",".idea/",".vagrant/"],"__vagrantfile":true,"exclude":[".git/",".idea/",".vagrant/"],"owner":"vagrant","group":"vagrant"}}}
