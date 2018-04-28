@@ -1,0 +1,15 @@
+---
+- name: Install php
+  yum:
+    name: "{{item}}"
+    state: present
+    enablerepo: remi-php56
+  with_items:
+  - php-mbstring
+  - php-mysqlnd
+  - php-fpm
+  - php-devel
+  - php-pear
+  - php-opcache
+  - php-pecl-redis
+  - php-gd

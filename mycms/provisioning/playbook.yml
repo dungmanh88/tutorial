@@ -1,0 +1,19 @@
+---
+- name: Install environment
+  hosts: all
+  roles:
+    - base
+    - mysql
+    - php
+    - nginx
+
+  tasks:
+  - name: start and enable service
+    service:
+      name: "{{item}}"
+      enabled: yes
+      state: restarted
+    with_items:
+      - mysqld
+      - php-fpm
+      - nginx

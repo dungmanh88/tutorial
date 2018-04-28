@@ -1,0 +1,55 @@
+---
+- name: Install mysql-repo
+  yum:
+    name: https://dev.mysql.com/get/mysql57-community-release-el7-11.noarch.rpm
+    state: present
+
+- name: Disable mysql57
+  command: yum-config-manager --disable mysql57-community
+
+- name: Enable mysql56
+  command: yum-config-manager --enable mysql56-community
+
+- name: Install mysql
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - mysql-community-server
+    - mysql-community-devel
+
+- name: Install the MySQL-python through pip
+  pip:
+    name: "{{ item }}"
+    state: forcereinstall
+  with_items:
+    - pip
+    - MySQL-python
+
+# 'localhost' needs to be the last item for idempotency, see
+# http://ansible.cc/docs/modules.html#mysql-user
+- name: Change root user password on first run
+  mysql_user: login_user=root
+              login_password={{ mysql_root_password }}
+              check_implicit_admin=yes
+              name=root
+              password={{ mysql_root_password }}
+              priv=*.*:ALL,GRANT
+              host={{ item }}
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: delete anonymous MySQL server user for {{ ansible_hostname }}
+  mysql_user: user="" host="{{ ansible_hostname }}" state="absent"
+              login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+
+- name: delete anonymous MySQL server user for localhost
+  mysql_user: user="" state="absent"
+              login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+
+- name: remove the MySQL test database
+  mysql_db: name=test state=absent
+            login_user=root login_password={{ mysql_root_password }}

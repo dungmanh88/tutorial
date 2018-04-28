@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "centos/7"
+  config.vm.network :forwarded_port, guest: 8000, host: 8081
+  config.vm.network "private_network", ip: "192.168.77.100"
+
+  config.vm.provider :virtualbox do |v|
+    v.name = "mycms"
+    v.memory = 512
+    v.cpus = 1
+  end
+
+  config.vm.hostname = "mycms"
+
+  config.vm.synced_folder './', '/vagrant', type: "rsync",
+  rsync__exclude: [".git/", ".idea/", ".vagrant/"]
+
+  # Configure the window for gatling to coalesce writes.
+  if Vagrant.has_plugin?("vagrant-gatling-rsync")
+    config.gatling.latency = 2.5
+    config.gatling.time_format = "%H:%M:%S"
+  end
+
+  # Automatically sync when machines with rsync folders come up.
+  config.gatling.rsync_on_startup = true
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/playbook.yml"
+    ansible.host_key_checking = false
+    ansible.become = true
+    ansible.become_user = "root"
+  end
+end
