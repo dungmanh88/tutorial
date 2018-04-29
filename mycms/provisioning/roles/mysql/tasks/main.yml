@@ -26,6 +26,7 @@
 
 - name: Ensure MySQL is started and enabled on boot.
   service: "name={{ mysql_daemon }} state=started enabled={{ mysql_enabled_on_startup }}"
+  when: mysql_install_packages
 
 - name: Install the MySQL-python through pip
   pip:
@@ -50,18 +51,22 @@
     - 127.0.0.1
     - ::1
     - localhost
+  when: mysql_install_packages
 
 - name: delete anonymous MySQL server user for {{ ansible_hostname }}
   mysql_user: user="" host="{{ ansible_hostname }}" state="absent"
               login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+  when: mysql_install_packages
 
 - name: delete anonymous MySQL server user for localhost
   mysql_user: user="" state="absent"
               login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+  when: mysql_install_packages
 
 - name: remove the MySQL test database
   mysql_db: name=test state=absent
             login_user=root login_password={{ mysql_root_password }}
+  when: mysql_install_packages
 
 - name: Ensure MySQL databases are present.
   mysql_db:
@@ -72,6 +77,7 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
   with_items: "{{ mysql_databases }}"
+  when: mysql_install_packages
 
 - name: Ensure MySQL users are present.
   mysql_user:
@@ -85,6 +91,7 @@
     login_user: root
     login_password: "{{ mysql_root_password }}"
   with_items: "{{ mysql_users }}"
+  when: mysql_install_packages
 
 # Has to be after the root password assignment, for idempotency.
 - name: Copy .my.cnf file with root password credentials.
@@ -94,3 +101,4 @@
     owner: root
     group: root
     mode: 0600
+  when: mysql_install_packages
