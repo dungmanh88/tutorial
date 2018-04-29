@@ -10,10 +10,10 @@
   tasks:
   - name: start and enable service
     service:
-      name: "{{item}}"
+      name: "{{ item }}"
       enabled: yes
       state: restarted
     with_items:
-      - mysqld
-      - php-fpm
-      - nginx
+      - "{{ mysql_daemon }}"
+      - "{{ php_fpm_daemon }}"
+      - "{{ nginx_daemon }}"

@@ -1,1 +1,27 @@
+mysql_root_home: /root
+mysql_daemon: mysqld
+mysql_enabled_on_startup: yes
+mysql_packages:
+  - mysql-community-server
+  - mysql-community-devel
+
+mysql_root_username: root
 mysql_root_password: "123"
+# Databases.
+mysql_databases:
+#   - name: example
+#     collation: utf8_general_ci
+#     encoding: utf8
+  - name: mycms
+
+
+# Users.
+mysql_users:
+#   - name: example
+#     host: 127.0.0.1
+#     password: secret
+#     priv: *.*:USAGE
+  - name: mycms
+    host: localhost
+    password: mycms
+    priv: "mycms.*:ALL"
