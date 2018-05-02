@@ -27,13 +27,13 @@
         foreach($pages as $page) {
           ?>
             <tr>
-            <td><?php echo $page['id']; ?></td>
-            <td><?php echo $page['position']; ?></td>
-            <td><?php echo $page['visible']; ?></td>
-            <td><?php echo $page['name']; ?></td>
-            <td><a class="action" href="<?php echo url_for('/staff/pages/show.php') . '?id=' . u($page['id']);?>">View</a></td>
-            <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php') . '?id=' . u($page['id']);?>">Edit</a></td>
-            <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php') . '?id=' . u($page['id']);?>">Delete</a></td>
+            <td><?php echo h($page['id']); ?></td>
+            <td><?php echo h($page['position']); ?></td>
+            <td><?php echo $page['visible'] == 1 ? 'true' : 'false'; ?></td>
+            <td><?php echo h($page['name']); ?></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/show.php') . '?id=' . h(u($page['id']));?>">View</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php') . '?id=' . h(u($page['id']));?>">Edit</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php') . '?id=' . h(u($page['id']));?>">Delete</a></td>
           </tr>
           <?php
         }

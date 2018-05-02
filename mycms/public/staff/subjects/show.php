@@ -1,6 +1,9 @@
 <!-- explain: include, require just only include in a page scope -->
 <?php require_once('../../../private/initialize.php'); ?>
-
+<?php $page_title = "MyCMS Staff Show Subjects" ?>
+<?php require_once(SHARED_PATH . '/staff_header.php'); ?>
+<< <a class="action" href="<?php echo url_for('/staff/subjects/index.php'); ?>">Back to list</a>
+<br />
 <?php
   $id = isset($_GET['id']) ? $_GET['id'] : '1';
   // explain: because you work on dynamic data, you don't know what data has include
@@ -8,11 +11,9 @@
   // example id=<strong>13</strong> -> output without h is <strong>13</strong>
   // but output with h is &lt;strong&gt;13&lt;/strong&gt;
   // html entities like &lt; &gt; will appear < > just these text not a html tag
-  echo h($id);
-
-
+  echo "Subject ID = " . h($id);
 ?>
-
+<?php require_once(SHARED_PATH . '/staff_footer.php'); ?>
 <!-- explain:
 urlencode will encode query string, the path after ?
 urlencode will encode some special character to hecxa code like

@@ -1,6 +1,6 @@
 <html lang="en">
   <head>
-    <title><?php echo $page_title; ?></title>
+    <title><?php echo h($page_title); ?></title>
     <meta charset="utf-8">
     <!-- explain: path in require, include, require_once, include_one is file system path -->
     <!-- explain: You should absolutely web url from doc root -->
