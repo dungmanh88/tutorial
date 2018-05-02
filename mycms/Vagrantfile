@@ -26,6 +26,7 @@ Vagrant.configure(2) do |config|
 
   # Automatically sync when machines with rsync folders come up.
   config.gatling.rsync_on_startup = true
+  # vagrant gatling-rsync-auto manually
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "provisioning/playbook.yml"

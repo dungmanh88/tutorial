@@ -1,12 +1,44 @@
-<!doctype html>
-
-<html lang="en">
-  <head>
-    <title></title>
-    <meta charset="utf-8">
-  </head>
-
-  <body>
-
-  </body>
-</html>
+<?php require_once('../../../private/initialize.php'); ?>
+<?php $page_title = "MyCMS Staff Pages" ?>
+<?php require_once(SHARED_PATH . '/staff_header.php'); ?>
+<?php
+  $pages = [
+    ["id" => "1", "position" => "1" , "visible" => "1", "name" => "Fuck"],
+    ["id" => "2", "position" => "1" , "visible" => "1", "name" => "You"],
+    ["id" => "3", "position" => "1" , "visible" => "1", "name" => "Hallo"],
+    ["id" => "4", "position" => "1" , "visible" => "1", "name" => "Shit"]
+  ];
+ ?>
+<div id="content">
+  <div class="subjects listing">
+    <h1>Pages</h1>
+    <div class="actions">
+      <a class="action" href="">Create New Page</a>
+    </div>
+    <table class="list">
+      <th>ID</th>
+      <th>Position</th>
+      <th>Visible</th>
+      <th>Name</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <?php
+        foreach($pages as $page) {
+          ?>
+            <tr>
+            <td><?php echo $page['id']; ?></td>
+            <td><?php echo $page['position']; ?></td>
+            <td><?php echo $page['visible']; ?></td>
+            <td><?php echo $page['name']; ?></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/show.php') . '?id=' . u($page['id']);?>">View</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php') . '?id=' . u($page['id']);?>">Edit</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php') . '?id=' . u($page['id']);?>">Delete</a></td>
+          </tr>
+          <?php
+        }
+      ?>
+    </table>
+  </div>
+</div>
+<?php require_once(SHARED_PATH . '/staff_footer.php'); ?>

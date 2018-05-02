@@ -1,12 +1,5 @@
-<!doctype html>
-
-<html lang="en">
-  <head>
-    <title></title>
-    <meta charset="utf-8">
-  </head>
-
-  <body>
-
-  </body>
-</html>
+<?php
+  require_once('../../../private/initialize.php');
+  $page_id = isset($_GET['id']) ? $_GET['id'] : 1;
+  echo h($page_id);
+ ?>
