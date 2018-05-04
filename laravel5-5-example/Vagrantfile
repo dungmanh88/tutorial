@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  #config.vm.box = "bento/centos-7.2" # guest 5.1.10
+  #config.vm.box = "bento/centos-7.4" # guest 5.2.6
+  config.vm.box = "bento/centos-7.4"
+  # CUSTOMIZE HERE
+  config.vm.network :forwarded_port, guest: 80, host: 8083
+  # CUSTOMIZE HERE
+  config.vm.network "private_network", ip: "192.168.77.103"
+  # CUSTOMIZE HERE
+  config.vm.provider :virtualbox do |v|
+    v.name = "laravel-blog-example"
+    v.memory = 512
+    v.cpus = 1
+  end
+  # CUSTOMIZE HERE
+  config.vm.hostname = "lavarel-blog-example"
+
+  config.vbguest.auto_update = false
+
+  config.vbguest.no_remote = true
+
+  # Don't try to use a different synced_folder
+  config.vm.synced_folder './', '/vagrant',
+    owner: "vagrant",
+    group: "vagrant",
+    mount_options: ["dmode=775,fmode=664"]
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/playbook.yml"
+    ansible.host_key_checking = false
+    ansible.become = true
+    ansible.become_user = "root"
+  end
+end

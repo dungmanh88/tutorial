@@ -1,0 +1,64 @@
+---
+
+- name: Add user nginx, apache, vagrant to group
+  user:
+    name: "{{ item }}"
+    groups: "{{ app_group }}"
+    append: yes
+  with_items:
+    - "{{ app_nginx_user }}"
+    - "{{ app_php_fpm_user }}"
+    - "{{ app_vagrant_user }}"
+
+- name: Change .env file
+  template:
+    src: env.conf.j2
+    dest: "{{ app_root }}/.env"
+    owner: "{{ app_vagrant_user }}"
+    group: "{{ app_group }}"
+    mode: 0644
+
+- name: Run composer install
+  command: "{{ php_composer_install }} install"
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Run composer update
+  command: "{{ php_composer_install }} update"
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Apply config after restarting
+  service: name="{{ item }}" state=restarted
+  with_items:
+    - "{{ nginx_daemon }}"
+    - "{{ php_fpm_daemon }}"
+
+- name: Laravel clear config cache
+  command: php artisan config:cache
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Laravel generate key
+  command: php artisan key:generate
+  args:
+    chdir: "{{ app_root }}"
+  register: l_output
+
+- debug: msg="{{ l_output.stdout }}"
+#- debug: msg="{{ l_output.stderr }}"
+
+- name: Laravel clear config cache
+  command: php artisan config:cache
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Laravel migrate db
+  command: php artisan migrate --seed
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Laravel clear config cache
+  command: php artisan config:cache
+  args:
+    chdir: "{{ app_root }}"
