@@ -32,7 +32,7 @@
   yum:
     name: "php-common"
     state: absent
-  when: php_cli_version not in php_cli_installed_version.stdout
+  when: php_cli_installed_version.rc == 0 and php_cli_installed_version.stdout is defined and php_cli_version not in php_cli_installed_version.stdout
 
 - name: Install php
   yum:
