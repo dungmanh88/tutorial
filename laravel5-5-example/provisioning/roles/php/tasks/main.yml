@@ -19,6 +19,11 @@
     php_cli_version: "5.6"
   when: php_version == "php56"
 
+- name: Set php_cli_version 5.4
+  set_fact:
+    php_cli_version: "5.4"
+  when: php_version == "php54"
+
 - name: Get PHP version.
   command: 'php --version'
   register: php_cli_installed_version
@@ -34,11 +39,16 @@
     state: absent
   when: php_cli_installed_version.rc == 0 and php_cli_installed_version.stdout is defined and php_cli_version not in php_cli_installed_version.stdout
 
+- name: Disable all remi php
+  command: yum-config-manager --disable "remi-php*"
+
+- name: Enable remi php
+  command: yum-config-manager --enable "remi-{{ php_version }}"
+
 - name: Install php
   yum:
     name: "{{ item }}"
     state: present
-    enablerepo: "remi-{{ php_version }}"
   with_items: "{{ php_packages }}"
 
 - name: Stat php_fpm_pool_conf_path

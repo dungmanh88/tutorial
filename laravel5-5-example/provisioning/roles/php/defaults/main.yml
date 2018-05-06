@@ -20,8 +20,8 @@ php_composer_install: "{{ php_composer_path }}/composer"
 # CUSTOMIZE HERE
 php_composer_auto_update: false
 # CUSTOMIZE HERE
-# php56, php70, php71, php72
-php_version: php71
+# php54, php56, php70, php71, php72
+php_version: php72
 # CUSTOMIZE HERE
 php_packages:
   - php

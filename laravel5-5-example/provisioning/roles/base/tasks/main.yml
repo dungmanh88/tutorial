@@ -35,9 +35,6 @@
     - git
     - python-devel
 
-- name: Enable remi php
-  command: yum-config-manager --enable "remi-{{ php_version }}"
-
 - name: check to see if pip is already installed
   command: "pip --version"
   ignore_errors: true
