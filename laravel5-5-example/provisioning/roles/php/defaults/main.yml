@@ -17,6 +17,7 @@ php_fpm_pm_max_spare_servers: 5
 
 php_composer_path: /usr/local/bin
 php_composer_install: "{{ php_composer_path }}/composer"
+# CUSTOMIZE HERE
 php_composer_auto_update: false
 # CUSTOMIZE HERE
 # php56, php70, php71, php72
