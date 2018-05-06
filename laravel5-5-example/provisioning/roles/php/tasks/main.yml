@@ -1,4 +1,39 @@
 ---
+- name: Set php_cli_version 7.2
+  set_fact:
+    php_cli_version: 7.2
+  when: php_version == "php72"
+
+- name: Set php_cli_version 7.1
+  set_fact:
+    php_cli_version: 7.1
+  when: php_version == "php71"
+
+- name: Set php_cli_version 7.0
+  set_fact:
+    php_cli_version: 7.0
+  when: php_version == "php70"
+
+- name: Set php_cli_version 5.6
+  set_fact:
+    php_cli_version: 5.6
+  when: php_version == "php56"
+
+- name: Get PHP version.
+  command: 'php --version'
+  register: php_cli_installed_version
+  changed_when: false
+  ignore_errors: yes
+
+- debug: msg="{{ php_cli_version }}"
+- debug: msg="{{ php_cli_installed_version }}"
+
+- name: Remove php when version changed
+  yum:
+    name: "php-common"
+    state: absent
+  when: php_cli_version not in php_cli_installed_version
+
 - name: Install php
   yum:
     name: "{{ item }}"
