@@ -31,7 +31,7 @@
 - name: Install the MySQL-python through pip
   pip:
     name: "{{ item }}"
-    state: forcereinstall
+#    state: forcereinstall
   with_items:
     - pip
     - MySQL-python

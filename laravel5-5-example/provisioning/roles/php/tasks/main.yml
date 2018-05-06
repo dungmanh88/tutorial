@@ -1,22 +1,22 @@
 ---
 - name: Set php_cli_version 7.2
   set_fact:
-    php_cli_version: 7.2
+    php_cli_version: "7.2"
   when: php_version == "php72"
 
 - name: Set php_cli_version 7.1
   set_fact:
-    php_cli_version: 7.1
+    php_cli_version: "7.1"
   when: php_version == "php71"
 
 - name: Set php_cli_version 7.0
   set_fact:
-    php_cli_version: 7.0
+    php_cli_version: "7.0"
   when: php_version == "php70"
 
 - name: Set php_cli_version 5.6
   set_fact:
-    php_cli_version: 5.6
+    php_cli_version: "5.6"
   when: php_version == "php56"
 
 - name: Get PHP version.
@@ -32,7 +32,7 @@
   yum:
     name: "php-common"
     state: absent
-  when: php_cli_version not in php_cli_installed_version
+  when: php_cli_version not in php_cli_installed_version.stdout
 
 - name: Install php
   yum:

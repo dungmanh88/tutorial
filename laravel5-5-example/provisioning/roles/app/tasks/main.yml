@@ -10,6 +10,9 @@
     - "{{ app_php_fpm_user }}"
     - "{{ app_vagrant_user }}"
 
+- stat: path="{{ app_root }}/.env"
+  register: env
+
 - name: Change .env file
   template:
     src: env.conf.j2
@@ -17,6 +20,7 @@
     owner: "{{ app_vagrant_user }}"
     group: "{{ app_group }}"
     mode: 0644
+  when: not env.stat.exists
 
 - name: Run composer install
   command: "{{ php_composer_install }} install"
@@ -54,7 +58,7 @@
     chdir: "{{ app_root }}"
 
 - name: Laravel migrate db
-  command: php artisan migrate --seed
+  command: php artisan migrate
   args:
     chdir: "{{ app_root }}"
 
