@@ -1,13 +1,9 @@
-# Installation Guide
-https://github.com/bestmomo/laravel5-3-example
-
 # Tree folder
 You should have a look at these files and folder in vagrant.laravel.example
 ```
 Vagrantfile
 provisioning/
 install_ansible_macosx.sh
-install_vagrant_plugin_rsync.sh
 ```
 <project_folder> is a folder contains your webapp code.
 
@@ -22,17 +18,11 @@ https://www.vagrantup.com/downloads.html
 ```
 
 # Install ansible
+http://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+or if you are using MacOSX, you can use my script:
 ```
 chmod u+x install_ansible_macosx.sh
 ./install_ansible_macosx.sh
-```
-
-# Install vagrant plugin
-```
-cp install_vagrant_plugin_rsync.sh <project_folder>
-cd <project_folder>
-chmod u+x install_vagrant_plugin_rsync.sh
-./install_vagrant_plugin_rsync.sh
 ```
 
 # Setup Vagrantfile and provisioning
@@ -58,18 +48,6 @@ provisioning/roles/php/defautls/main.yml
 provisioning/roles/app/defautls/main.yml
 
 Note the lines below # CUSTOMIZE HERE
-```
-
-# Apply new changes in vagrant box back to host
-```
-cd <project_folder>
-vagrant rsync-back
-```
-
-# Turn on vagrant rsync automatically from host to guest
-```
-cd <project_folder>
-vagrant gatling-rsync-auto
 ```
 
 # Access webapp

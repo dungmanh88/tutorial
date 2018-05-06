@@ -58,10 +58,21 @@
   args:
     chdir: "{{ app_root }}"
 
-- name: Laravel migrate db
+- name: Laravel create tables
   command: php artisan migrate
   args:
     chdir: "{{ app_root }}"
+
+- name: Laravel clear config cache
+  command: php artisan config:cache
+  args:
+    chdir: "{{ app_root }}"
+
+- name: Laravel seeding db
+  command: php artisan migrate --seed
+  args:
+    chdir: "{{ app_root }}"
+  ignore_errors: true
 
 - name: Laravel clear config cache
   command: php artisan config:cache
