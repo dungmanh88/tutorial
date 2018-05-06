@@ -31,6 +31,7 @@
   command: "{{ php_composer_install }} update"
   args:
     chdir: "{{ app_root }}"
+  when: php_composer_auto_update  
 
 - name: Apply config after restarting
   service: name="{{ item }}" state=restarted
