@@ -14,4 +14,14 @@ function u($string=""){
 function h($string="") {
   return htmlspecialchars($string);
 }
+
+function error_404(){
+  header("404 File Not Found");
+  exit();
+}
+
+function error_500(){
+  header("500 Internal Server Error");
+  exit();
+}
 ?>

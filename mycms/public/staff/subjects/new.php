@@ -1,12 +1,9 @@
-<!doctype html>
-
-<html lang="en">
-  <head>
-    <title></title>
-    <meta charset="utf-8">
-  </head>
-
-  <body>
-
-  </body>
-</html>
+<?php
+require_once("../../../private/initialize.php")
+$test = isset($_GET['test']) ? $_GET['test'] : '';
+if ($test == '404'){
+  error_404();
+} elseif ($test == '500'){
+  error_500();
+}
+?>
